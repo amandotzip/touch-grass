@@ -70,6 +70,13 @@
     padding: 1rem;
     box-sizing: inherit;
     position: relative;
+    background-image: url('../images/background.jpg');
+    background-size: cover; /* Ensures the image covers the entire container */
+    background-position: center; /* Centers the image */
+    /* flex-direction: column; */
+  }
+  .h1 {
+    text-align: center;
   }
 
   .angular-logo {
@@ -177,9 +184,15 @@
   }
 </style>
 
+<h1>Touch Grass</h1>
+<app-upload></app-upload>
 <main class="main">
-  <div class="content">
-    <div class="left-side">
+  <app-photo-gallery></app-photo-gallery>
+  <!-- <div class="content"> -->
+
+
+
+    <!-- <div class="left-side">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 982 239"
@@ -227,8 +240,10 @@
       </svg>
       <h1>Hello, {{ title }}</h1>
       <p>Congratulations! Your app is running. 🎉</p>
-    </div>
-    <div class="divider" role="separator" aria-label="Divider"></div>
+      
+    </div> -->
+ 
+    <!-- <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
       <div class="pill-group">
         @for (item of [
@@ -319,9 +334,9 @@
             />
           </svg>
         </a>
-      </div>
-    </div>
-  </div>
+      </div> -->
+    <!-- </div> -->
+  <!-- </div> -->
 </main>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
