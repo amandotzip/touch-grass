@@ -73,7 +73,7 @@
     background-image: url('../images/background.jpg');
     background-size: cover; /* Ensures the image covers the entire container */
     background-position: center; /* Centers the image */
-    /* flex-direction: column; */
+    flex-direction: column;
   }
   .h1 {
     text-align: center;
@@ -184,9 +184,10 @@
   }
 </style>
 
-<h1>Touch Grass</h1>
-<app-upload></app-upload>
 <main class="main">
+  <h1>Touch Grass</h1>
+  <p>Go outside and upload a photo of touching grass! :)</p>
+  <app-upload></app-upload>
   <app-photo-gallery></app-photo-gallery>
   <!-- <div class="content"> -->
 

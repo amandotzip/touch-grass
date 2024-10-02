@@ -30,6 +30,8 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'com.amazonaws:aws-java-sdk-secretsmanager:1.12.772' // Use the latest version
+	implementation 'org.json:json:20220320'
 }
 
 tasks.named('test') {

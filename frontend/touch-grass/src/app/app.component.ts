@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { UploadComponent } from './upload.component';
+import { UploadComponent } from './upload-component/upload.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PhotoGalleryComponent } from './photo-gallery/photo-gallery.component';
+import { PhotoGalleryComponent } from './photo-gallery-component/photo-gallery.component';
 
 @Component({
   selector: 'app-root',

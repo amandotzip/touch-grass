@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-photo-gallery',
@@ -15,10 +16,9 @@ export class PhotoGalleryComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    console.log('PhotoGalleryComponent initialized');
-    this.http.get<string[]>('http://localhost:5000/get-s3-images')
+    this.http.get<string[]>(`${environment.apiBaseUrl}/get-s3-images`)
       .subscribe(data => {
-        console.log(data);
+        console.debug(data);
         this.images = data;
       });
   }
