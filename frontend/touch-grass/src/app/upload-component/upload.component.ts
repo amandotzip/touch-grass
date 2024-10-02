@@ -54,23 +54,57 @@ export class UploadComponent {
 
 
     if (!selectedFile.name.match(/.(jpg|jpeg|png|gif)$/i)) {
-      console.log('Selected file is invalid.');
+      console.log('Selected file type is invalid.');
       return;
     }
 
-    // Request the pre-signed URL from the back-end
-    this.http.get(`${environment.apiBaseUrl}/generate-presigned-url?fileName=${selectedFile.name}&recaptchaToken=${this.recaptchaToken}`, { responseType: 'text' })
-      .subscribe(
-        (presignedUrl: string) => {
-          // Upload the file to S3 using the pre-signed URL
-          this.http.put(presignedUrl, selectedFile, {
-            headers: { 'Content-Type': selectedFile.type }
-          }).subscribe(
-            () => console.log('File uploaded successfully!'),
-            error => console.error('Error uploading file:', error)
-          );
-        },
-        error => console.error('Error generating pre-signed URL:', error)
-      );
+
+
+    // Create FormData to send the file and recaptcha token
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('recaptchaToken', this.recaptchaToken);  // If using reCAPTCHA
+
+    
+    // // Request the pre-signed URL from the back-end
+    // this.http.post(`${environment.apiBaseUrl}/upload`, formData)
+    //   .subscribe(
+    //     // (presignedUrl: string) => {
+    //     //   // Upload the file to S3 using the pre-signed URL
+    //     //   this.http.put(presignedUrl, selectedFile, {
+    //     //     headers: { 'Content-Type': selectedFile.type }
+    //     //   }).subscribe(
+    //     //     () => console.log('File uploaded successfully!'),
+    //     //     error => console.error('Error uploading file:', error)
+    //     //   );
+    //     // },
+    //     error => console.error('Error generating pre-signed URL:', error)
+    //   );
+
+
+      // Send the multipart file to the backend via POST
+    this.http.post(`${environment.apiBaseUrl}/upload`, formData, { responseType: 'text' }).subscribe(
+      response => {
+        console.log('File uploaded successfully!', response);
+      },
+      error => {
+        console.error('Error uploading file:', error);
+      }
+    );
+
+    //       // Request the pre-signed URL from the back-end
+    // this.http.get(`${environment.apiBaseUrl}/generate-presigned-url-for-upload?filePath=${selectedFile.name}&recaptchaToken=${this.recaptchaToken}`, { responseType: 'text' })
+    // .subscribe(
+    //   (presignedUrl: string) => {
+    //     // Upload the file to S3 using the pre-signed URL
+    //     this.http.put(presignedUrl, selectedFile, {
+    //       headers: { 'Content-Type': selectedFile.type }
+    //     }).subscribe(
+    //       () => console.log('File uploaded successfully!'),
+    //       error => console.error('Error uploading file:', error)
+    //     );
+    //   },
+    //   error => console.error('Error generating pre-signed URL:', error)
+    // );
   }
 }

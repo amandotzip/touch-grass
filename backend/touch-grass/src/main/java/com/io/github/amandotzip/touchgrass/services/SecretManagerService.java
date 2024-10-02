@@ -17,6 +17,11 @@ public class SecretManagerService {
                 .build();
     }
 
+    /**
+     * Retrieves a secret value from AWS Secrets Manager
+     * @param secretName The name of the secret to retrieve
+     * @return The secret value
+     */
     public String getSecretValue(String secretName) {
         // Create a request for the secret
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
