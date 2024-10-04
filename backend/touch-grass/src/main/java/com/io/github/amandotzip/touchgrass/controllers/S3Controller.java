@@ -46,7 +46,6 @@ public class S3Controller {
         if (isRateLimited(userIp)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Rate limit exceeded. Try again later.");
         }
-        // System.out.println(frontendUrl);
         return s3Service.processImage(file);
     }
 

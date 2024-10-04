@@ -58,8 +58,16 @@ public class S3Service {
      * @return a ResponseEntity containing an appropriate HTTP status and a message
      */
     public ResponseEntity<String> processImage(MultipartFile file) {
+        System.out.println("Processing image: " + file.getOriginalFilename());
+
+        // Define a unique file name by appending a UUID or timestamp to the original filename
+        String uniqueFileName = file.getOriginalFilename().replace(".", "_" + UUID.randomUUID() + ".");
+        // Define the S3 object key (file name)
+        String imageKeyString = GALLERY_KEY_NAME + '/' + uniqueFileName;
+
+
         // Step 1: Upload image to S3
-        ResponseEntity<String> s3Response = uploadToS3Bucket(file);
+        ResponseEntity<String> s3Response = uploadToS3Bucket(file, imageKeyString);
 
         // Check if the response is not OK
         if (!s3Response.getStatusCode().is2xxSuccessful()) {
@@ -67,13 +75,12 @@ public class S3Service {
             return ResponseEntity.status(s3Response.getStatusCode()).body(s3Response.getBody());
         }
 
-        String imageKeyString = GALLERY_KEY_NAME + '/' + file.getOriginalFilename();
-
         // FUNCTIONING but usecase not needed atm
         // // Step 2: Analyze the image using AWS Rekognition (Label Detection)
         // ImageAnalyzer analyzer = new ImageAnalyzer();
         // analyzer.analyzeImage(BUCKET_NAME, imageKeyString);
 
+        System.out.println("Content moderation");
         // Step 3: (Optional) Use Rekognition for content moderation (making sure it's not innapropriate)
         ContentModerator contentModerator = new ContentModerator();
         List<ModerationLabel> moderationLabels = contentModerator.moderateImageContent(BUCKET_NAME, imageKeyString);
@@ -92,41 +99,40 @@ public class S3Service {
         s3Client.deleteObject(new DeleteObjectRequest(BUCKET_NAME, imageKey));
     }   
 
-    public ResponseEntity<String> uploadToS3Bucket(MultipartFile file) {
-         // Verify the reCAPTCHA token (this is where you'd validate it)
+    public ResponseEntity<String> uploadToS3Bucket(MultipartFile file, String imageKeyString ) {
+        System.out.println("Initial uploadToS3Bucket: " + file.getOriginalFilename());
 
         try {
-            // Define a unique file name by appending a UUID or timestamp to the original filename
-            String uniqueFileName = file.getOriginalFilename().replace(".", "_" + UUID.randomUUID() + ".");
-            // Define the S3 object key (file name)
-            String imageKeyString = GALLERY_KEY_NAME + '/' + uniqueFileName;
-
             // Create object metadata, which is used to store additional information such as content length and type
-            ObjectMetadata metadata = getMetadata(file);
+            // ObjectMetadata metadata = getMetadata(file);
+
+            System.out.println("put object");
+            System.out.println(BUCKET_NAME);
+            System.out.println(imageKeyString);
+            
 
             // Upload the file to S3
-            s3Client.putObject(new PutObjectRequest(BUCKET_NAME, imageKeyString, file.getInputStream(), metadata));
+            s3Client.putObject(new PutObjectRequest(BUCKET_NAME, imageKeyString, file.getInputStream(), null));
 
             // Return the public URL of the uploaded object
             String fileUrl = s3Client.getUrl(BUCKET_NAME, imageKeyString).toString();
-            return ResponseEntity.ok("File uploaded successfully. File URL: " + fileUrl);
+            System.out.println("Initial file uploaded successfully");
+            return ResponseEntity.ok("Initial file uploaded successfully. File URL: " + fileUrl);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed!");
         }
-
-
         
     }
 
 
-    private ObjectMetadata getMetadata(MultipartFile file) {
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());  // e.g., "image/jpeg", "image/png", "application/pdf"
-        return metadata;
-    }
+    // private ObjectMetadata getMetadata(MultipartFile file) {
+    //     ObjectMetadata metadata = new ObjectMetadata();
+    //     metadata.setContentLength(file.getSize());
+    //     metadata.setContentType(file.getContentType());  // e.g., "image/jpeg", "image/png", "application/pdf"
+    //     return metadata;
+    // }
 
     /**
      * Retrieves all image URLs from a given S3 bucket.
@@ -154,10 +160,13 @@ public class S3Service {
     public void validateCaptcha(String recaptchaToken) {
         RestTemplate restTemplate = new RestTemplate();
         String secretValue = getGoogleRecaptchaSecret();
-
+        System.out.println("secretValue: " + secretValue);
         String verifyUrl = String.format("%s?secret=%s&response=%s", RECAPTCHA_VERIFY_URL, secretValue, recaptchaToken);
+        System.out.println("verifyUrl: " + verifyUrl);
         Map<String, Object> response = restTemplate.postForObject(verifyUrl, null, Map.class);
+        System.out.println(response);
         boolean captchaSuccess = (boolean) response.get("success");
+        System.out.println("captchaSuccess: " + captchaSuccess);
         
         if (!captchaSuccess) {
             throw new RuntimeException("reCAPTCHA validation failed.");
