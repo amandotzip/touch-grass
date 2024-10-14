@@ -52,6 +52,7 @@ public class S3Controller {
 
     @GetMapping("/get-s3-images")
     public List<String> getS3Images() {
+        
         return s3Service.getBucketImages();
     }
 

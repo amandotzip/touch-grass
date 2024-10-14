@@ -160,13 +160,9 @@ public class S3Service {
     public void validateCaptcha(String recaptchaToken) {
         RestTemplate restTemplate = new RestTemplate();
         String secretValue = getGoogleRecaptchaSecret();
-        System.out.println("secretValue: " + secretValue);
         String verifyUrl = String.format("%s?secret=%s&response=%s", RECAPTCHA_VERIFY_URL, secretValue, recaptchaToken);
-        System.out.println("verifyUrl: " + verifyUrl);
         Map<String, Object> response = restTemplate.postForObject(verifyUrl, null, Map.class);
-        System.out.println(response);
         boolean captchaSuccess = (boolean) response.get("success");
-        System.out.println("captchaSuccess: " + captchaSuccess);
         
         if (!captchaSuccess) {
             throw new RuntimeException("reCAPTCHA validation failed.");
