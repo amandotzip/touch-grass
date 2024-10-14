@@ -51,4 +51,11 @@
     object-fit: cover; 
     margin: auto;
 
+    opacity: 0; /* Initially hide images */
+    transition: opacity 1s ease-in-out; /* Transition for fade-in effect */
+
+  }
+
+  img.fade-in {
+    opacity: 1; /* Show images when they are visible */
   }

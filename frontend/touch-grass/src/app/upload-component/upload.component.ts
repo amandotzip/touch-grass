@@ -19,6 +19,8 @@ export class UploadComponent {
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     console.debug(this.selectedFile);
+    this.triggerRecaptchaAndUpload();
+
   }
 
 

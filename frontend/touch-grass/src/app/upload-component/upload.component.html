@@ -1,4 +1,5 @@
-<div class ="upload">
-<input type="file" (change)="onFileSelected($event)" /> 
-<button (click)="triggerRecaptchaAndUpload()">Upload to S3</button>
+<div class="upload">
+    <label for="file-upload" class="google-btn"><span class="material-icons">cloud_upload</span>&nbsp;New post</label>
+    <input id="file-upload" class="file-input" type="file" (change)="onFileSelected($event)" />
+    <!-- <button class = "google-btn" (click)="triggerRecaptchaAndUpload()">Upload</button> -->
 </div>

@@ -1,5 +1,15 @@
 # TouchGrass
 
+# How to start
+## Build
+ng build --configuration development/production
+## Local start
+node server.js
+## Deploy to elastic beanstalk
+eb deploy
+
+Run server
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.9.
 
 ## Development server
