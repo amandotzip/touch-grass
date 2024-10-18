@@ -1,0 +1,18 @@
+<div *ngIf="!isQuizFinished(); else finishTemplate">
+    <img [src]="questions[currentQuestionIndex].image" alt="Question Image" style="max-width: 100%; height: auto; margin-bottom: 20px;">
+    <h2>{{ questions[currentQuestionIndex].question }}</h2>
+    
+    <div class="answers">
+      <button *ngFor="let answer of questions[currentQuestionIndex].answers"
+              [disabled]="selectedAnswer !== null"
+              (click)="selectAnswer(answer)">
+        {{ answer }}
+      </button>
+    </div>
+  
+    <button *ngIf="showNextButton" (click)="nextQuestion()">Next</button>
+  </div>
+  
+  <ng-template #finishTemplate>
+    <h2>Thanks for completing the quiz!</h2>
+  </ng-template>

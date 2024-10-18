@@ -1,0 +1,7 @@
+<div>
+    <h2>Nearby Places</h2>
+    <p *ngIf="location">Your Location: {{ location }}</p>
+    <ul>
+      <li *ngFor="let place of places">{{ place.name }}</li>
+    </ul>
+  </div>
